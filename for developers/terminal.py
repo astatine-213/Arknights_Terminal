@@ -5,9 +5,15 @@
 # [["name",height,[birthmonth,birthday],"foreign name",type,gender,star,organization,drawer]]
 # description structure:
 # {"name":"description"}
+# optionlist:
+# ["file name",]
 # typetuple=("近卫","术师","医疗","特种","狙击","先锋","辅助","重装")
 # organizationtuple=("罗德岛","喀兰贸易","龙门","莱茵生命","格拉斯哥帮","使徒","汐斯塔","深海猎人","SWEEP","乌萨斯学生自治团","王者之杖","企鹅物流","黑钢国际","维多利亚","卡西米尔无胄盟","莱塔尼亚")
 # drawertuple=("Liduke","竜崎いち","虎三","Infukun","海猫络合物","Skade","NoriZC","m9nokuro","一立里子","谜肘","TOKI","neco","阿鬼","唯@W","alchemaniac","YUJI","HUG","戏言咸咸","下野宏铭","LLC","REALMBW","我妻洛酱","幻象黑兔","LM7","渣念","鸭","RAN","Lanzi","aZLing4","deel","时辰","Lpip","Iritoa","KENTllaall","Anmi","将","咩煲","藻","STAR影法师","KuroBlood","toast","")
+# infrapls=()
+# infraspecial=()
+# tagtuple=()
+# racetuple=()
 # xp1file content:["",,[,],"",,,,,],
 #
 #description部分感谢以下人士（网址已附上，顺便还有原帖链接）
@@ -22,6 +28,7 @@
 #https://www.bigfun.cn/post/65502
 #
 global searchdict,optionlist,dat,descriptiondict,vartuple,orgnizationtuple,typetuple,drawertuple
+global infrapls,infraspecial,racetuple,tagtuple
 import os,time,xlsxwriter
 typetuple=("近卫","术师","医疗","特种","狙击","先锋","辅助","重装")
 organizationtuple=("罗德岛","喀兰贸易","龙门","莱茵生命","格拉斯哥帮","使徒","汐斯塔","深海猎人","SWEEP","乌萨斯学生自治团","王者之杖","企鹅物流","黑钢国际","维多利亚","卡西米尔无胄盟","莱塔尼亚")
@@ -255,7 +262,7 @@ def getoption():
 		with open("search.config","w",encoding="utf-8") as f:
 			f.write(str(optionlist));f.close()
 def readxp1file(filename):
-	with open(filename+".xp1",encoding="utf-8") as f:
+	with open(os.getcwd()+os.sep+"datas"+os.sep+filename+".xp1",encoding="utf-8") as f:
 		tmp=f.read();f.close()
 	tmp=eval(tmp)
 	return tmp
