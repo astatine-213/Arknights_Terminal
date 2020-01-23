@@ -2,7 +2,7 @@
 # Author:Astatine-213
 # Sorry about that only Windows platform is supported
 # data structure:
-# [["name",height,[birthmonth,birthday],"foreign name",type,gender,star,organization,drawer]]
+# [["name",height,[birthmonth,birthday],"foreign name",type,gender,star,organization,drawer,[infrapls],[infraspecial],[tags],race]]
 # description structure:
 # {"name":"description"}
 # optionlist:
@@ -13,7 +13,7 @@
 # infrapls=("无","控制中枢","制造站","贸易站","发电站","宿舍","会客室","办公室","训练室","加工站")
 # infraspecial=("无","效率加","效率减","扩容/增量","减容量","心情消耗减少（恢复加快）","心情消耗增加（恢复减慢）","针对特殊干员生效","仅对自身有效","仅对同设施其他干员有效","针对特殊物品加成","加成会随时间变化","加成恒定","","",)
 # tagtuple=("不可公招","近卫干员","术士干员","医疗干员","特种干员","狙击干员","先锋干员","辅助干员","重装干员","新手","资深干员","高级资深干员","远程位","近战位","治疗","支援","输出","群攻","减速","生存","防护","削弱","位移","控场","爆发","召唤","快速复活","费用恢复","支援机械")
-# racetuple=("",)
+# racetuple=("菲林（猫科）","鬼","埃拉菲亚（梅花鹿）","丰蹄（）","萨弗拉（）","","","","","","","","","未公开")
 # xp1file content:["",,[,],"",,,,,],
 # 公招tag:
 # https://aktoolscn.graueneko.xyz/hr
