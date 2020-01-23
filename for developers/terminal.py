@@ -10,11 +10,14 @@
 # typetuple=("近卫","术师","医疗","特种","狙击","先锋","辅助","重装")
 # organizationtuple=("罗德岛","喀兰贸易","龙门","莱茵生命","格拉斯哥帮","使徒","汐斯塔","深海猎人","SWEEP","乌萨斯学生自治团","王者之杖","企鹅物流","黑钢国际","维多利亚","卡西米尔无胄盟","莱塔尼亚")
 # drawertuple=("Liduke","竜崎いち","虎三","Infukun","海猫络合物","Skade","NoriZC","m9nokuro","一立里子","谜肘","TOKI","neco","阿鬼","唯@W","alchemaniac","YUJI","HUG","戏言咸咸","下野宏铭","LLC","REALMBW","我妻洛酱","幻象黑兔","LM7","渣念","鸭","RAN","Lanzi","aZLing4","deel","时辰","Lpip","Iritoa","KENTllaall","Anmi","将","咩煲","藻","STAR影法师","KuroBlood","toast","")
-# infrapls=()
-# infraspecial=()
-# tagtuple=()
-# racetuple=()
+# infrapls=("无","控制中枢","制造站","贸易站","发电站","宿舍","会客室","办公室","训练室","加工站")
+# infraspecial=("无","效率加","效率减","扩容/增量","减容量","心情消耗减少（恢复加快）","心情消耗增加（恢复减慢）","针对特殊干员生效","仅对自身有效","仅对同设施其他干员有效","针对特殊物品加成","加成会随时间变化","加成恒定","","",)
+# tagtuple=("不可公招","近卫干员","术士干员","医疗干员","特种干员","狙击干员","先锋干员","辅助干员","重装干员","新手","资深干员","高级资深干员","远程位","近战位","治疗","支援","输出","群攻","减速","生存","防护","削弱","位移","控场","爆发","召唤","快速复活","费用恢复","支援机械")
+# racetuple=("",)
 # xp1file content:["",,[,],"",,,,,],
+# 公招tag:
+# https://aktoolscn.graueneko.xyz/hr
+#
 #
 #description部分感谢以下人士（网址已附上，顺便还有原帖链接）
 #主要作者：
@@ -28,12 +31,17 @@
 #https://www.bigfun.cn/post/65502
 #
 global searchdict,optionlist,dat,descriptiondict,vartuple,orgnizationtuple,typetuple,drawertuple
-global infrapls,infraspecial,racetuple,tagtuple
+global infrapls,infraspecial,racetuple,tagtuple,tokendict
 import os,time,xlsxwriter
 typetuple=("近卫","术师","医疗","特种","狙击","先锋","辅助","重装")
 organizationtuple=("罗德岛","喀兰贸易","龙门","莱茵生命","格拉斯哥帮","使徒","汐斯塔","深海猎人","SWEEP","乌萨斯学生自治团","王者之杖","企鹅物流","黑钢国际","维多利亚","卡西米尔无胄盟","莱塔尼亚")
 drawertuple=("Liduke","竜崎いち","虎三","Infukun","海猫络合物","Skade","NoriZC","m9nokuro","一立里子","谜肘","TOKI","neco","阿鬼","唯@W","alchemaniac","YUJI","HUG","戏言咸咸","下野宏铭","LLC","REALMBW","我妻洛酱","幻象黑兔","LM7","渣念","鸭","RAN","Lanzi","aZLing4","deel","时辰","Lpip","Iritoa","KENTllaall","Anmi","将","咩煲","藻","STAR影法师","KuroBlood","toast","")
 vartuple=("姓名","身高","生日","外文名","职业","性别","星级","所属组织","画师",)
+infrapls=("无","控制中枢","制造站","贸易站","发电站","宿舍","会客室","办公室","训练室","加工站")
+tagtuple=("不可公招","近卫干员","术士干员","医疗干员","特种干员","狙击干员","先锋干员","辅助干员","重装干员","新手","资深干员","高级资深干员","远程位","近战位","治疗","支援","输出","群攻","减速","生存","防护","削弱","位移","控场","爆发","召唤","快速复活","费用恢复","支援机械")
+
+
+
 def getday(datelist):
 	months=[31,28,31,30,31,30,31,31,30,31,30,31];tmp=0;c=0
 	while c<datelist[0]-1:
@@ -160,13 +168,15 @@ def genderstr(innum):
 def detailstring(inlist):
 	msg=""
 	for x in inlist:
-		if optionlist[3]:
-			msg+="干员%s，身高%dcm，生日%s，外文名%s，职业%s，性别%s，星级%d，属于组织%s，是画师%s的作品。\n%s\n\n"%(x[0],x[1],datelist_to_str(x[2]),x[3],typetuple[x[4]],genderstr(x[5]),x[6],organizationtuple[x[7]],drawertuple[x[8]],descriptiondict[x[0]])
-		else:
-			msg+="干员%s，身高%dcm，生日%s，外文名%s，职业%s，性别%s，星级%d，属于组织%s，是画师%s的作品。\n\n"%(x[0],x[1],datelist_to_str(x[2]),x[3],typetuple[x[4]],genderstr(x[5]),x[6],organizationtuple[x[7]],drawertuple[x[8]])
+		msg+="干员%s，身高%dcm，生日%s，外文名%s，职业%s，性别%s，星级%d，属于组织%s，是画师%s的作品。\n"%(x[0],x[1],datelist_to_str(x[2]),x[3],typetuple[x[4]],genderstr(x[5]),x[6],organizationtuple[x[7]],drawertuple[x[8]])
+		if optionlist[4]:
+			msg+="%s\n"%descriptiondict[x[0]]
+		if optionlist[5]:
+			msg+="%s\n"%tokendict[x[0]]
+		msg+="\n"
 	msg+="\n\n\n作者：Astatine-213\n"
-	if optionlist[3]:
-		desecriptionthankstr="description部分感谢以下人士（网址已附上，顺便还有原帖链接）\
+	if optionlist[4]:
+		desecriptionthankstr="干员姓名解析部分感谢以下人士（网址已附上，顺便还有原帖链接）\
 		\n主要作者：\
 		\n印奇斯廷：https://www.bigfun.cn/user/211981/theme\
 		\n提供帮助和建议者：（排名不分先后）\
@@ -182,7 +192,6 @@ def totxtfile(inlist):
 	with open(optionlist[0]+".txt","w",encoding="utf-8") as f:
 		f.write(detailstring(inlist));f.close()
 def toxlsxfile(inlist):
-	global optionlist,descriptiondict,orgnizationtuple,typetuple,drawertuple
 	workbook = xlsxwriter.Workbook(optionlist[0]+'.xlsx')
 	worksheet = workbook.add_worksheet()
 	cell_format = workbook.add_format()
@@ -198,8 +207,10 @@ def toxlsxfile(inlist):
 	worksheet.write(0,7,"星级",cell_format)
 	worksheet.write(0,8,"组织",cell_format)
 	worksheet.write(0,9,"画师",cell_format)
-	if optionlist[3]:
+	if optionlist[4]:
 		worksheet.write(0,10,"姓名解析")
+	if optionlist[5]:
+		worksheet.write(0,11,"干员信物")
 	c=1
 	for x in inlist:
 		worksheet.write(c,1,x[0],cell_format)
@@ -212,20 +223,27 @@ def toxlsxfile(inlist):
 		worksheet.write(c,8,organizationtuple[x[7]],cell_format)
 		worksheet.write(c,0,c,cell_format)
 		worksheet.write(c,9,drawertuple[x[8]],cell_format)
-		if optionlist[3]:
+		if optionlist[4]:
 			worksheet.write(c,10,descriptiondict[x[0]])
+		if optionlist[5]:
+			worksheet.write(c,11,tokendict[x[0]])
 		c+=1
 	cf = workbook.add_format()
 	cf.set_align('center')
 	cf.set_align('vcenter')
 	cf.set_center_across()
 	worksheet.write(c,0,"制作者：Astatine-213",cf)
+	top=9
+	if optionlist[4]:
+		top+=1
+	if optionlist[5]:
+		top+=1
 	i=1
-	while i<=10:
+	while i<=top:
 		worksheet.write(c,i,"",cf);i+=1
-	if optionlist[3]:
+	if optionlist[4]:
 		cf.set_text_wrap()
-		desecriptionthankstr="description部分感谢以下人士（网址已附上，顺便还有原帖链接）\
+		desecriptionthankstr="干员姓名解析部分感谢以下人士（网址已附上，顺便还有原帖链接）\
 		\n主要作者：\
 		\n印奇斯廷：https://www.bigfun.cn/user/211981/theme\
 		\n提供帮助和建议者：（排名不分先后）\
@@ -236,8 +254,14 @@ def toxlsxfile(inlist):
 		\n链接2：https://www.bigfun.cn/post/113609"
 		worksheet.write(c+1,0,desecriptionthankstr,cf)
 		i=1
-		while i<=10:
+		while i<=top:
 			worksheet.write(c+1,i,"",cf);i+=1
+	if optionlist[5]:
+		tokenthankstr="干员信物部分感谢bigfun用户印奇斯廷整理。"
+		worksheet.write(c+2,0,tokenthankstr,cf)
+		i=1
+		while i<=top:
+			worksheet.write(c+2,i,"",cf);i+=1
 	workbook.close()
 def getoption():
 	global optionlist
@@ -254,10 +278,11 @@ def getoption():
 		optionlist.append(input("新文件名（不需要后缀）："))
 	else:
 		optionlist.append(getformattedtime())
-	optionlist.append(confirm("是否需要进行时间统计？"))
 	optionlist.append(confirm("输出为txt文件（Y）还是输出为xlsx文件（N）?"))
-	optionlist.append(confirm("是否需要干员姓名解析？"))
+	optionlist.append(confirm("是否需要进行时间统计？"))
 	optionlist.append(confirm("按照身高降序（Y）或者升序（N）输出？"))
+	optionlist.append(confirm("是否需要干员姓名解析？"))
+	optionlist.append(confirm("是否需要干员信物文档？"))
 	if confirm("是否需要保存配置？"):
 		with open("search.config","w",encoding="utf-8") as f:
 			f.write(str(optionlist));f.close()
@@ -272,7 +297,7 @@ def startsearch():
 	if "name" in searchdict:
 		tmp1=searchdict["name"]
 		if "*" in tmp1:
-			if optionlist[3]:
+			if optionlist[4]:
 				tmp=sort_max(tmp)
 			else:
 				tmp=sort_min(tmp)
@@ -351,14 +376,19 @@ def startsearch():
 			if x[8] in tmp1:
 				out.append(x)
 		tmp=out[:];out=[]
-	if optionlist[3]:
+	if optionlist[4]:
 		tmp=sort_max(tmp)
 	else:
 		tmp=sort_min(tmp)
 	return tmp
 descriptiondict=readxp1file("description")
 dat=readxp1file("data")
+tokendict=readxp1file("token")
 searchdict={}
+##################################################################################################
+##################################################################################################
+##################################################################################################
+##################################################################################################
 ##################################################################################################
 ##################################################################################################
 print("明日方舟干员数据快查器v0.0.1")
@@ -632,15 +662,15 @@ if 9 in l1:    #画师
 
 
 os.system("cls")
-if optionlist[1]:
+if optionlist[2]:
 	time1=time.time()
 result=startsearch()
-if optionlist[1]:
+if optionlist[2]:
 	time2=time.time()
 	deltatime=int((time2-time1)*1000)/1000
 	print("本次搜索耗时%f秒."%deltatime)
 print(detailstring(result))
-if optionlist[2]:
+if optionlist[1]:
 	totxtfile(result)
 else:
 	toxlsxfile(result)
