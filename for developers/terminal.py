@@ -2,7 +2,7 @@
 # Author:Astatine-213
 # Sorry about that only Windows platform is supported
 # data structure:
-# [["name",height,[birthmonth,birthday],"foreign name",type,gender,star,organization,drawer,[infrapls],[infraspecial],[tags],race]]
+# [["name",height,[birthmonth,birthday],"foreign name",type,gender,star,organization,drawer,{infrapls:[infraspecial]},[tags],race]]
 # description structure:
 # {"name":"description"}
 # optionlist:
@@ -11,10 +11,10 @@
 # organizationtuple=("罗德岛","喀兰贸易","龙门","莱茵生命","格拉斯哥帮","使徒","汐斯塔","深海猎人","SWEEP","乌萨斯学生自治团","王者之杖","企鹅物流","黑钢国际","维多利亚","卡西米尔无胄盟","莱塔尼亚")
 # drawertuple=("Liduke","竜崎いち","虎三","Infukun","海猫络合物","Skade","NoriZC","m9nokuro","一立里子","谜肘","TOKI","neco","阿鬼","唯@W","alchemaniac","YUJI","HUG","戏言咸咸","下野宏铭","LLC","REALMBW","我妻洛酱","幻象黑兔","LM7","渣念","鸭","RAN","Lanzi","aZLing4","deel","时辰","Lpip","Iritoa","KENTllaall","Anmi","将","咩煲","藻","STAR影法师","KuroBlood","toast","")
 # infrapls=("无","控制中枢","制造站","贸易站","发电站","宿舍","会客室","办公室","训练室","加工站")
-# infraspecial=("无","效率（副产品百分比）加","效率（副产品百分比）减","扩容/增量","减容量","心情消耗减少（恢复加快）","心情消耗增加（恢复减慢）","针对特殊干员生效","仅对自身有效","仅对同设施其他干员有效","针对特殊物品加成","加成会随时间变化","加成恒定")
+# infraspecial=("无","效率（副产品百分比）加","效率（副产品百分比）减","扩容/增量","减容量","心情消耗减少（恢复加快）","心情消耗增加（恢复减慢）","针对特殊干员生效","仅对自身有效","仅对同设施其他干员有效","针对特殊物品加成","加成会随时间变化","加成恒定","加强效果","减弱效果")
 # tagtuple=("不可公招","近卫干员","术士干员","医疗干员","特种干员","狙击干员","先锋干员","辅助干员","重装干员","新手","资深干员","高级资深干员","远程位","近战位","治疗","支援","输出","群攻","减速","生存","防护","削弱","位移","控场","爆发","召唤","快速复活","费用恢复","支援机械")
 # racetuple=("菲林（猫科）","鬼","埃拉菲亚（梅花鹿）","丰蹄（）","萨弗拉（）","","","","","","","","","未公开")
-# xp1file content:["",,[,],"",,,,,],
+# xp1file content:["",,[,],"",,,,,,[],[],[]],
 # 公招tag:
 # https://aktoolscn.graueneko.xyz/hr
 #
@@ -39,9 +39,26 @@ drawertuple=("Liduke","竜崎いち","虎三","Infukun","海猫络合物","Skade
 vartuple=("姓名","身高","生日","外文名","职业","性别","星级","所属组织","画师","基建位置","基建加成","公招tag","种族")
 infrapls=("无","控制中枢","制造站","贸易站","发电站","宿舍","会客室","办公室","训练室","加工站")
 tagtuple=("不可公招","近卫干员","术士干员","医疗干员","特种干员","狙击干员","先锋干员","辅助干员","重装干员","新手","资深干员","高级资深干员","远程位","近战位","治疗","支援","输出","群攻","减速","生存","防护","削弱","位移","控场","爆发","召唤","快速复活","费用恢复","支援机械")
-infraspecial=("无","效率加","效率减","扩容/增量","减容量","心情消耗减少（恢复加快）","心情消耗增加（恢复减慢）","针对特殊干员生效","仅对自身有效","仅对同设施其他干员有效","针对特殊物品加成","加成会随时间变化","加成恒定")
+infraspecial=("无","效率（副产品百分比）加","效率（副产品百分比）减","扩容/增量","减容量","心情消耗减少（恢复加快）","心情消耗增加（恢复减慢）","针对特殊干员生效","仅对自身有效","仅对同设施其他干员有效","针对特殊物品加成","加成会随时间变化","加成恒定","加强效果","减弱效果")
 
-
+def allin(A, B): #仅可用于数字列表！！！
+	A.sort()
+	B.sort()
+    if len(A) > len(B):
+		allin(B,A)
+    k = 0
+    for i in range(0,len(A)):
+        for j in range(k,len(B)):
+            if A[i] == B[j]:
+                if i == len(A)-1:
+                    return True
+                else:
+                    break
+        if j < len(B)-1:
+            k = j+1
+        else:
+            break
+    return False
 def getday(datelist):
 	months=[31,28,31,30,31,30,31,31,30,31,30,31];tmp=0;c=0
 	while c<datelist[0]-1:
@@ -388,15 +405,30 @@ def startsearch():
 		tmp=out[:];out=[]
 	if "infrapls" in searchdict:
 		tmp1=searchdict["infrapls"]
-		for x in tmp:
-			if x[9]==tmp1:
-				out.append(x)
+		if len(tmp1)==1:    #只有一个值，视为模糊查询
+			for x in tmp:
+				infra=x[9]    #读取基建字典
+				tmp_infrapls=[]
+				for k,v in infra.items():
+					tmp_infrapls.append(k)    #获取该干员所有基建位置
+				if allin(tmp_infrapls,tmp1):    #当且仅当所有基建位置都一样的时候才能这么干
+					out.append(x)
+		else:    #视为精确查询
+			for x in tmp:
+				infra=x[9]    #读取基建字典
+				tmp_infrapls=[]
+				for k,v in infra.items():
+					tmp_infrapls.append(k)    #获取该干员所有基建位置
+				if tmp_infrapls==tmp1:    #当且仅当所有基建位置都一样的时候才返回范围值
+					out.append(x)
 		tmp=out[:];out=[]
 	if "infraspecial" in searchdict:
 		tmp1=searchdict["infraspecial"]
 		for x in tmp:
-			if x[10]==tmp1:
-				out.append(x)
+			infra=x[9]    #读取基建字典
+			for k,v in infra.items():
+				if v==tmp1:
+					out.append(x)
 		tmp=out[:];out=[]
 	if "tag" in searchdict:
 		tmp1=searchdict["tag"]
@@ -411,7 +443,7 @@ def startsearch():
 	if "race" in searchdict:
 		tmp1=searchdict["race"]
 		for x in tmp:
-			if x[12] in tmp1:
+			if allin(x[12],tmp1):
 				out.append(x)
 		tmp=out[:];out=[]
 	if optionlist[4]:
@@ -700,22 +732,35 @@ if 9 in l1:    #画师
 
 if 10 in l1:   #基建位置
 	os.system("cls")
-	print("下列多选选项为“和”的关系，将会被作为一个查询关键字查询")
-	searchdict["infrapls"]=getchoice(infrapls,True)
+	print("注意：如果在这里单选将查询所有包含这些基建位置的干员（数学上的“属于”关系）")
+	print("如果在这里多选将会以“当且仅当干员拥有输入基建位置”查询（数学上的“等于”关系）")
+	tmp=getchoice(infrapls,True)
+	for x in tmp:
+		tmp[tmp.index(x)]=x-1
+	searchdict["infrapls"]=tmp
 
 if 11 in l1:   #基建加成
 	os.system("cls")
-	print("下列多选选项为“和”的关系，将会被作为一个查询关键字查询")
-	searchdict["infraspecial"]=getchoice(infraspecial,True)
+	print("注意：这里的多选是在一个基建位置中的所有加成。")
+	tmp=getchoice(infraspecial,True)
+	for x in tmp:
+		tmp[tmp.index(x)]=x-1
+	searchdict["infraspecial"]=tmp
 
 if 12 in l1:   #公招tag
 	os.system("cls")
-	print("下列多选选项为“和”的关系，将会被作为一个查询关键字查询")
-	searchdict["tag"]=getchoice(tagtuple,True)
+	print("注意：这里可以看做一个模拟的公招，但是不会划掉你的tag。")
+	tmp=getchoice(tagtuple,True)
+	for x in tmp:
+		tmp[tmp.index(x)]=x-1
+	searchdict["tag"]=tmp
 
 if 13 in l1:   #种族
 	os.system("cls")
-	searchdict["race"]=getchoice(racetuple,True)
+	tmp=getchoice(racetuple,True)
+	for x in tmp:
+		tmp[tmp.index(x)]=x-1
+	searchdict["race"]=tmp
 
 os.system("cls")
 if optionlist[2]:
